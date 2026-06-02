@@ -1,25 +1,85 @@
-<html>
-<body>
-<div class="Login">
-<h1>FWI Prediction</h1>
+import streamlit as st
 
-<!-- Main Input For Receiving Query to our ML -->
-<form action="{{ url_for('predict_datapoints') }}" method="post">
-    <input type="text" name="Temperature" placeholder="Temperature" required="required" /><br>
-    <input type="text" name="RH" placeholder="RH" required="required" /><br>
-    <input type="text" name="Ws" placeholder="Ws" required="required" /><br>
-    <input type="text" name="Rain" placeholder="Rain" required="required" /><br>
-    <input type="text" name="FFMC" placeholder="FFMC" required="required" /><br>
-    <input type="text" name="DMC" placeholder="DMC" required="required" /><br>
-    <input type="text" name="ISI" placeholder="ISI" required="required" /><br>
-    <input type="text" name="Classes" placeholder="Classes" required="required" /><br>
-    <input type="text" name="Region" placeholder="Region" required="required" /><br>
+st.set_page_config(
+    page_title="FWI Prediction",
+    page_icon="🔥",
+    layout="wide"
+)
 
-    <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
-</form>
+st.markdown("""
+<style>
+.hero{
+    padding:50px;
+    border-radius:20px;
+    background:linear-gradient(135deg,#ff4b4b,#ff8c42);
+    color:white;
+    text-align:center;
+}
 
-<h2>
-    THE FWI prediction is {{result}}
-</h2>
-  <body>
-</html>
+.feature{
+    padding:20px;
+    border-radius:15px;
+    background:#f5f5f5;
+    text-align:center;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div class="hero">
+    <h1>🔥 Forest Fire Weather Index Prediction</h1>
+    <h3>Machine Learning Powered Forest Fire Risk Assessment</h3>
+    <p>Predict forest fire danger using environmental parameters.</p>
+</div>
+""", unsafe_allow_html=True)
+
+st.write("")
+st.write("")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown("""
+    <div class="feature">
+        <h3>🌡 Weather Data</h3>
+        <p>Analyze temperature and humidity.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <div class="feature">
+        <h3>🤖 ML Model</h3>
+        <p>Powered by trained Ridge Regression Model.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    st.markdown("""
+    <div class="feature">
+        <h3>🔥 Fire Risk</h3>
+        <p>Get instant FWI predictions.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.divider()
+
+st.subheader("📖 About Project")
+
+st.write("""
+The Forest Fire Weather Index (FWI) is a numerical rating of fire intensity.
+
+This application predicts the FWI using:
+
+- Temperature
+- Relative Humidity
+- Wind Speed
+- Rainfall
+- FFMC
+- DMC
+- ISI
+- Region
+- Fire Classes
+
+👉 Use the sidebar and open **FWI Prediction** page.
+""")

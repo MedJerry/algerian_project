@@ -16,7 +16,7 @@ standard_scaler = pickle.load(open('model/scaler.pkl', 'rb'))
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('home.html')
 @app.route('/predict', methods=['GET', 'POST'])
 def predict_datapoints():
     if request.method == 'POST':
@@ -35,6 +35,6 @@ def predict_datapoints():
         return render_template('home.html', result=result[0])
 
     else:
-        return render_template('home.html')
+        return render_template('index.html')
 if __name__ == '__main__':
     app.run(host='0.0.0.0') 

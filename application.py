@@ -1,40 +1,50 @@
-from flask import Flask, request, jsonify, render_template
+import streamlit as st
 import pickle
 import numpy as np
-import pandas as pd
-import sklearn.preprocessing as standarscaler
-from flask import Flask,request,jsonify,render_template
 
-application = Flask(__name__)
-app = application
-
-
-##import ridge regressor and standard scaler pickle
+# Load model and scaler
 ridge_model = pickle.load(open('model/ridgecv.pkl', 'rb'))
 standard_scaler = pickle.load(open('model/scaler.pkl', 'rb'))
 
+# Page configuration
+st.set_page_config(
+    page_title="FWI Prediction",
+    page_icon="🔥",
+    layout="wide"
+)
 
-@app.route('/')
-def index():
-    return render_template('home.py')
-@app.route('/predict', methods=['GET', 'POST'])
-def predict_datapoints():
-    if request.method == 'POST':
-        Temperature = float(request.form['Temperature'])
-        RH = float(request.form['RH'])
-        Ws = float(request.form['Ws'])
-        Rain = float(request.form['Rain'])
-        FFMC = float(request.form['FFMC'])
-        DMC = float(request.form['DMC'])
-        ISI = float(request.form['ISI'])
-        Classes = float(request.form['Classes'])
-        Region = float(request.form['Region']) 
+# Title
+st.title("🔥 Forest Fire Weather Index Prediction")
+st.write("Enter the required weather parameters below.")
 
-        new_data_scaled = standard_scaler.transform([[Temperature, RH, Ws, Rain, FFMC, DMC, ISI, Classes, Region]])
-        result = ridge_model.predict(new_data_scaled)
-        return render_template('home.html', result=result[0])
+# Input fields
+col1, col2 = st.columns(2)
 
-    else:
-        return render_template('index.py')
-if __name__ == '__main__':
-    app.run(host='0.0.0.0') 
+with col1:
+    Temperature = st.number_input("Temperature", value=0.0)
+    RH = st.number_input("Relative Humidity (RH)", value=0.0)
+    Ws = st.number_input("Wind Speed (Ws)", value=0.0)
+    Rain = st.number_input("Rain", value=0.0)
+    FFMC = st.number_input("FFMC", value=0.0)
+
+with col2:
+    DMC = st.number_input("DMC", value=0.0)
+    ISI = st.number_input("ISI", value=0.0)
+    Classes = st.number_input("Classes", value=0.0)
+    Region = st.number_input("Region", value=0.0)
+
+# Prediction button
+if st.button("Predict FWI"):
+    try:
+        features = np.array([[
+            Temperature, RH, Ws, Rain,
+            FFMC, DMC, ISI, Classes, Region
+        ]])
+
+        scaled_data = standard_scaler.transform(features)
+        prediction = ridge_model.predict(scaled_data)
+
+        st.success(f"Predicted FWI: {prediction[0]:.2f}")
+
+    except Exception as e:
+        st.error(f"Error: {e}")
